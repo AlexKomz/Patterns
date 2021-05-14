@@ -71,9 +71,19 @@ var Iterator;
         set id(value) {
             this._id = value;
         }
+        get firstChild() {
+            return this._firstChild;
+        }
+        get lastChild() {
+            return this._lastChild;
+        }
         addChild(child) {
             child.parent = this;
-            child.id = this._id + this._children.length + 1;
+            child.id = (this._parent ? this._parent.lastChild.id : 0) + this._children.length + 1;
+            if (!this._firstChild) {
+                this._firstChild = child;
+            }
+            this._lastChild = child;
             this._children.push(child);
             return this;
         }
@@ -94,7 +104,8 @@ var Iterator;
     }
     const root = new Node(0);
     const first = new Node(1);
-    root.addChild(first.clone()).addChild(first.clone()).addChild(first.clone());
+    root.addChild(first).addChild(first.clone()).addChild(first.clone());
+    first.addChild(first.clone());
     const tree = new Tree(root);
     const iterator = tree.getIterator();
     console.log(iterator.current().id);

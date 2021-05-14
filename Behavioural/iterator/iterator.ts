@@ -66,6 +66,9 @@ namespace Iterator {
         private _value: T;
         private _id: number;
 
+        private _firstChild: Node<T>;
+        private _lastChild: Node<T>;
+
         public constructor(value?: T, id?: number, parent?: Node<T>) {
             this._value = value ?? null;
             this._id = id ?? 0;
@@ -108,9 +111,25 @@ namespace Iterator {
             this._id = value;
         }
 
+        public get firstChild(): Node<T> {
+            return this._firstChild;
+        }
+
+        public get lastChild(): Node<T> {
+            return this._lastChild;
+        }
+
         public addChild(child: Node<T>) {
             child.parent = this;
-            child.id = this._id + this._children.length + 1;
+
+            child.id = (this._parent ? this._parent.lastChild.id : 0) + this._children.length + 1;
+
+            if (!this._firstChild) {
+                this._firstChild = child;
+            }
+
+            this._lastChild = child;
+
             this._children.push(child);
             return this;
         }
@@ -139,7 +158,8 @@ namespace Iterator {
     const root = new Node(0);
     const first = new Node(1);
 
-    root.addChild(first.clone()).addChild(first.clone()).addChild(first.clone());
+    root.addChild(first).addChild(first.clone()).addChild(first.clone());
+    first.addChild(first.clone());
 
     const tree = new Tree<number>(root);
     const iterator = tree.getIterator();
