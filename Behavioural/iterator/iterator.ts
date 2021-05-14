@@ -30,6 +30,7 @@ namespace Iterator {
 
         public next(): Node<T> {
             let result;
+
             for (let node of this._current.children) {
                 if (!this._isVisited(node)) {
                     result = node;
@@ -122,7 +123,7 @@ namespace Iterator {
         public addChild(child: Node<T>) {
             child.parent = this;
 
-            child.id = (this._parent ? this._parent.lastChild.id : 0) + this._children.length + 1;
+            child.id = (this._parent?.lastChild.id ?? 0) + this._children.length + 1;
 
             if (!this._firstChild) {
                 this._firstChild = child;

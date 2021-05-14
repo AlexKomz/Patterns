@@ -78,8 +78,9 @@ var Iterator;
             return this._lastChild;
         }
         addChild(child) {
+            var _a, _b;
             child.parent = this;
-            child.id = (this._parent ? this._parent.lastChild.id : 0) + this._children.length + 1;
+            child.id = ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a.lastChild.id) !== null && _b !== void 0 ? _b : 0) + this._children.length + 1;
             if (!this._firstChild) {
                 this._firstChild = child;
             }
